@@ -1,0 +1,21 @@
+[package]
+name = "game_ui"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# FIXME: remove dynamic_linking upon releasing
+bevy = { version = "^0.12", features = ["dynamic_linking"] }
+bevy_ecs_tilemap = { git = "https://github.com/divark/bevy_ecs_tilemap", branch = "0.12-fixes" }
+rand = "^0.8"
+game_core = { path = "../game_core" }
+
+# Enable a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
