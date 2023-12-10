@@ -9,21 +9,29 @@ pub fn player_input(
     mut next_game_turn: ResMut<NextState<GameTurn>>,
     player_query: Query<(Entity, &MapPos), With<Player>>,
     keyboard_input: Res<Input<KeyCode>>,
+    mut timer: Local<u128>,
+    time: Res<Time>,
 ) {
+    *timer += time.delta().as_millis();
     if let Ok((entity, map_pos)) = player_query.get_single() {
-        if let Some(delta) = if keyboard_input.just_pressed(KeyCode::Up) {
+        if let Some(delta) = if keyboard_input.pressed(KeyCode::Up) {
             Some(IVec2::new(0, 1))
-        } else if keyboard_input.just_pressed(KeyCode::Down) {
+        } else if keyboard_input.pressed(KeyCode::Down) {
             Some(IVec2::new(0, -1))
-        } else if keyboard_input.just_pressed(KeyCode::Left) {
+        } else if keyboard_input.pressed(KeyCode::Left) {
             Some(IVec2::new(-1, 0))
-        } else if keyboard_input.just_pressed(KeyCode::Right) {
+        } else if keyboard_input.pressed(KeyCode::Right) {
             Some(IVec2::new(1, 0))
-        } else if keyboard_input.just_pressed(KeyCode::Space) {
+        } else if keyboard_input.pressed(KeyCode::Space) {
             Some(IVec2::new(0, 0))
         } else {
             None
         } {
+            if *timer < 100 {
+                return;
+            }
+            *timer = 0;
+
             if delta.x != 0 || delta.y != 0 {
                 move_figure_event_writer.send(MoveAction {
                     actor: entity,
