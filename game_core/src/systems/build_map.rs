@@ -18,6 +18,7 @@ pub fn build_map(mut commands: Commands) {
     carve_corridors(&mut map_tile_grid, &rooms, &mut rng);
 
     commands.spawn((
+        Map,
         map_tile_grid,
         MapFigureGrid::new(MAP_BOUND),
         MapRoomList(rooms),

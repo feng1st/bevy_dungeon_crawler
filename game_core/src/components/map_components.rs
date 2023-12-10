@@ -10,6 +10,9 @@ pub enum TileType {
 #[derive(Component, Clone, Copy, PartialEq, Eq)]
 pub struct MapPos(pub IVec2);
 
+#[derive(Component)]
+pub struct Map;
+
 pub trait MapBound {
     fn bound(&self) -> &IVec2;
 

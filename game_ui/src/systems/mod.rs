@@ -1,5 +1,6 @@
+mod build_game_over_ui;
 mod build_in_game_ui;
-mod despawn_in_game_ui;
+mod hide_tooltip;
 mod load_assets;
 mod map_pos_to_trans;
 mod spawn_camera;
@@ -12,8 +13,9 @@ mod update_cursor_position;
 mod update_in_game_ui_player_health;
 mod update_in_game_ui_tooltip;
 
+pub use build_game_over_ui::*;
 pub use build_in_game_ui::*;
-pub use despawn_in_game_ui::*;
+pub use hide_tooltip::*;
 pub use load_assets::*;
 pub use map_pos_to_trans::*;
 pub use spawn_camera::*;

@@ -7,15 +7,16 @@ use crate::prelude::*;
 #[allow(clippy::needless_pass_by_value)]
 pub fn spawn_tilemap(
     mut commands: Commands,
-    query: Query<(Entity, &MapTileGrid)>,
+    query: Query<&MapTileGrid>,
     main_texture: Res<MainTexture>,
 ) {
-    if let Ok((entity, map_tile_grid)) = query.get_single() {
+    if let Ok(map_tile_grid) = query.get_single() {
         let tilemap_size = TilemapSize {
             x: map_tile_grid.bound.x as u32,
             y: map_tile_grid.bound.y as u32,
         };
         let mut tile_storage = TileStorage::empty(tilemap_size);
+        let entity: Entity = commands.spawn_empty().id();
         for x in 0..tilemap_size.x {
             for y in 0..tilemap_size.y {
                 let tile_pos = TilePos { x, y };
