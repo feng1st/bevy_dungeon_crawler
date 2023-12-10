@@ -25,4 +25,7 @@ pub struct Tooltip;
 pub struct TooltipText;
 
 #[derive(Component)]
+pub struct PlayerHealthBar;
+
+#[derive(Component)]
 pub struct PlayerHealthLabel;
