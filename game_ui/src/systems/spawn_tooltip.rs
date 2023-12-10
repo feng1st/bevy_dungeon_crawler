@@ -22,7 +22,7 @@ fn tooltip() -> NodeBundle {
             },
             ..Default::default()
         },
-        background_color: BackgroundColor(Color::rgba_u8(0, 0, 0, 127)),
+        background_color: BackgroundColor(Color::rgba(0., 0., 0., 0.5)),
         ..Default::default()
     }
 }

@@ -29,9 +29,10 @@ fn root_node() -> NodeBundle {
 fn player_health_bar_box_node() -> NodeBundle {
     NodeBundle {
         style: Style {
-            justify_content: JustifyContent::Center,
             width: Val::Percent(100.),
             height: Val::Px(32.),
+            align_content: AlignContent::Center,
+            justify_content: JustifyContent::Center,
             ..Default::default()
         },
         background_color: Color::MAROON.into(),
