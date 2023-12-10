@@ -39,7 +39,12 @@ impl Plugin for GameUiPlugin {
             )
             .add_systems(
                 OnEnter(GameState::InGame),
-                (spawn_tilemap, spawn_player_sprite, spawn_monster_sprites)
+                (
+                    spawn_tilemap,
+                    spawn_player_sprite,
+                    spawn_monster_sprites,
+                    spawn_amulet_of_yala_sprite,
+                )
                     .in_set(UiSystemSet::OnInGameSetupSprites),
             )
             .add_systems(
@@ -55,6 +60,14 @@ impl Plugin for GameUiPlugin {
                 (system_cleanup::<RootNode>, hide_tooltip).in_set(UiSystemSet::OnGameOverCleanupUi),
             )
             .add_systems(
+                OnEnter(GameState::Victory),
+                build_victory_ui.in_set(UiSystemSet::OnVictorySetupUi),
+            )
+            .add_systems(
+                OnExit(GameState::Victory),
+                (system_cleanup::<RootNode>, hide_tooltip).in_set(UiSystemSet::OnVictoryCleanupUi),
+            )
+            .add_systems(
                 Update,
                 update_in_game_ui_player_health.in_set(UiSystemSet::InGameUpdateUi),
             )
@@ -62,11 +75,10 @@ impl Plugin for GameUiPlugin {
                 Update,
                 (
                     map_pos_to_trans,
-                    update_camera,
-                    update_cursor_position,
-                    update_in_game_ui_tooltip,
+                    update_camera.after(map_pos_to_trans),
+                    update_cursor_position.after(update_camera),
+                    update_in_game_ui_tooltip.after(update_cursor_position),
                 )
-                    .chain()
                     .in_set(UiSystemSet::InGameUpdateSprites),
             );
     }

@@ -1,8 +1,10 @@
 mod build_game_over_ui;
 mod build_in_game_ui;
+mod build_victory_ui;
 mod hide_tooltip;
 mod load_assets;
 mod map_pos_to_trans;
+mod spawn_amulet_of_yala_sprite;
 mod spawn_camera;
 mod spawn_monster_sprites;
 mod spawn_player_sprite;
@@ -15,9 +17,11 @@ mod update_in_game_ui_tooltip;
 
 pub use build_game_over_ui::*;
 pub use build_in_game_ui::*;
+pub use build_victory_ui::*;
 pub use hide_tooltip::*;
 pub use load_assets::*;
 pub use map_pos_to_trans::*;
+pub use spawn_amulet_of_yala_sprite::*;
 pub use spawn_camera::*;
 pub use spawn_monster_sprites::*;
 pub use spawn_player_sprite::*;

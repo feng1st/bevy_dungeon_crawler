@@ -13,7 +13,10 @@ pub fn spawn_player(mut commands: Commands, mut query: Query<(&MapRoomList, &mut
                     current: 20,
                     max: 20,
                 },
-                Rest { current: 0, max: 5 },
+                Rest {
+                    current: 0,
+                    max: 10,
+                },
                 MapPos(player_pos),
             ))
             .id();

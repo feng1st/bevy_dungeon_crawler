@@ -11,12 +11,16 @@ pub fn move_figure(
     mut apply_damage_event_writer: EventWriter<AttackAction>,
     mut map_query: Query<(&MapTileGrid, &mut MapFigureGrid)>,
     mut move_figure_event_reader: EventReader<MoveAction>,
+    amulet_res: Res<AmuletOfYalaPos>,
+    mut next_game_state: ResMut<NextState<GameState>>,
 ) {
     for action in move_figure_event_reader.read() {
         // actor is gone
         if !entity_query.get(action.actor).is_ok() {
             continue;
         }
+
+        let actor_is_player = player_query.get(action.actor).is_ok();
 
         // cancel rest
         if let Ok(mut rest) = rest_query.get_mut(action.actor) {
@@ -30,7 +34,6 @@ pub fn move_figure(
                 let target_entity = map_figure_grid.get(action.target_pos);
                 // occupied
                 if entity_query.get(target_entity).is_ok() {
-                    let actor_is_player = player_query.get(action.actor).is_ok();
                     let target_is_player = player_query.get(target_entity).is_ok();
                     // attack
                     if actor_is_player != target_is_player {
@@ -62,6 +65,10 @@ pub fn move_figure(
                         map_figure_grid.reset(actor_pos.0);
                         map_figure_grid.set(action.target_pos, action.actor);
                         actor_pos.0 = action.target_pos;
+                    }
+
+                    if actor_is_player && action.target_pos == amulet_res.0 {
+                        next_game_state.set(GameState::Victory);
                     }
                 }
             }

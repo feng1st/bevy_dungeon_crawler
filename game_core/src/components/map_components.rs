@@ -63,6 +63,21 @@ impl MapTileGrid {
             self.tiles[index] = tile_type;
         }
     }
+
+    pub fn iter(&self, tile_type: TileType) -> impl Iterator<Item = IVec2> + '_ {
+        self.tiles
+            .iter()
+            .enumerate()
+            .filter_map(move |(index, &tile)| {
+                if tile == tile_type {
+                    let x = index as i32 % self.bound.x;
+                    let y = index as i32 / self.bound.x;
+                    Some(IVec2::new(x, y))
+                } else {
+                    None
+                }
+            })
+    }
 }
 
 #[derive(Component)]

@@ -7,7 +7,7 @@ pub struct PathFinder;
 impl PathFinder {
     pub fn find_path(
         map_tile_grid: &MapTileGrid,
-        map_figure_grid: &MapFigureGrid,
+        map_figure_grid: Option<&MapFigureGrid>,
         start: IVec2,
         end: IVec2,
     ) -> Option<Vec<IVec2>> {
@@ -17,7 +17,7 @@ impl PathFinder {
 
     pub fn find_path_with_cost(
         map_tile_grid: &MapTileGrid,
-        map_figure_grid: &MapFigureGrid,
+        map_figure_grid: Option<&MapFigureGrid>,
         start: IVec2,
         end: IVec2,
     ) -> Option<(Vec<IVec2>, u32)> {
@@ -31,7 +31,7 @@ impl PathFinder {
 
     fn neighbors(
         tile_grid: &MapTileGrid,
-        figure_grid: &MapFigureGrid,
+        figure_grid: Option<&MapFigureGrid>,
         pos: IVec2,
     ) -> Vec<(IVec2, u32)> {
         let mut neighbors = Vec::new();
@@ -40,7 +40,7 @@ impl PathFinder {
         for (dx, dy) in directions {
             let neighbor_pos = pos + IVec2::new(dx, dy);
             if tile_grid.can_enter(neighbor_pos) {
-                if figure_grid.get(neighbor_pos) != Entity::PLACEHOLDER {
+                if figure_grid.is_some_and(|f| f.get(neighbor_pos) != Entity::PLACEHOLDER) {
                     neighbors.push((neighbor_pos, 8));
                 } else {
                     neighbors.push((neighbor_pos, 1));
