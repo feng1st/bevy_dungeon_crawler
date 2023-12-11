@@ -38,8 +38,8 @@ fn gen_rooms(rng: &mut ThreadRng) -> Vec<IRect> {
         );
 
         let mut overlap = false;
-        for r in &rooms {
-            if !room.intersect(*r).is_empty() {
+        for &r in &rooms {
+            if !room.intersect(r).is_empty() {
                 overlap = true;
                 break;
             }
@@ -53,7 +53,7 @@ fn gen_rooms(rng: &mut ThreadRng) -> Vec<IRect> {
 }
 
 fn carve_rooms(map_tile_grid: &mut MapTileGrid, rooms: &Vec<IRect>) {
-    for room in rooms {
+    for &room in rooms {
         for x in room.min.x..room.max.x {
             for y in room.min.y..room.max.y {
                 map_tile_grid.set(IVec2::new(x, y), TileType::Floor);

@@ -18,14 +18,12 @@ pub fn monster_chase_player(
     };
 
     for (monster_entity, monster_pos) in &monster_query {
-        let Some(target_pos) = PathFinder::find_path(
+        let Some(target_pos) = PathFinder::find_next_pos(
             map_tile_grid,
             Some(map_figure_grid),
             monster_pos.0,
             player_pos.0,
-        )
-        .filter(|x| x.len() > 1)
-        .map(|x| x[1]) else {
+        ) else {
             continue;
         };
 

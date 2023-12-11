@@ -1,9 +1,9 @@
 use bevy::prelude::*;
 
-#[derive(Component, Clone, Copy, PartialEq, Eq)]
+#[derive(Component)]
 pub struct Item;
 
-#[derive(Component, Clone, Copy, PartialEq, Eq)]
+#[derive(Component)]
 pub struct AmuletOfYala;
 
 #[derive(Resource, Default)]

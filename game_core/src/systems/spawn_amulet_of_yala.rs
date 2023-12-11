@@ -17,10 +17,11 @@ pub fn spawn_amulet_of_yala(
 
     if let Some(amulet_pos) = map_tile_grid
         .iter(TileType::Floor)
-        .filter_map(|pos| PathFinder::find_path_with_cost(map_tile_grid, None, pos, player_pos.0))
-        .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
-        .filter(|(path, _)| path.len() > 0)
-        .map(|(path, _)| path[0])
+        .filter_map(|pos| {
+            PathFinder::find_cost(map_tile_grid, None, pos, player_pos.0).map(|cost| (pos, cost))
+        })
+        .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+        .map(|(pos, _)| pos)
     {
         amulet_res.0 = amulet_pos;
         commands.spawn((Item, AmuletOfYala, MapPos(amulet_pos)));
