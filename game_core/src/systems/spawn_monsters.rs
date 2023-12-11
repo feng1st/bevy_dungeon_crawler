@@ -3,7 +3,6 @@ use rand::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn spawn_monsters(
     mut commands: Commands,
     mut query: Query<(&MapRoomList, &mut MapFigureGrid)>,
@@ -15,7 +14,7 @@ pub fn spawn_monsters(
     };
 
     for room in map_room_list.0.iter().skip(1) {
-        let map_pos = IVec2::from(room.center());
+        let map_pos = room.center();
 
         let monster_id = match rng.gen_range(0..20) {
             0..=1 => 0,

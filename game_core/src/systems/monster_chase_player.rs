@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::type_complexity)]
 pub fn monster_chase_player(
     mut move_figure_event_writer: EventWriter<MoveAction>,
     monster_query: Query<(Entity, &MapPos), (With<Monster>, With<ChasingMind>)>,

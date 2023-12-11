@@ -3,7 +3,6 @@ use game_core::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn spawn_monster_sprites(
     mut commands: Commands,
     monster_query: Query<(Entity, &Monster)>,

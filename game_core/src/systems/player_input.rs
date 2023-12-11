@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn player_input(
     mut move_figure_event_writer: EventWriter<MoveAction>,
     mut take_rest_event_writer: EventWriter<RestAction>,

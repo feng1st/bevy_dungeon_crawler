@@ -15,19 +15,21 @@ mod update_cursor_position;
 mod update_in_game_ui_player_health;
 mod update_in_game_ui_tooltip;
 
-pub use build_game_over_ui::*;
-pub use build_in_game_ui::*;
-pub use build_victory_ui::*;
-pub use hide_tooltip::*;
-pub use load_assets::*;
-pub use map_pos_to_trans::*;
-pub use spawn_amulet_of_yala_sprite::*;
-pub use spawn_camera::*;
-pub use spawn_monster_sprites::*;
-pub use spawn_player_sprite::*;
-pub use spawn_tilemap::*;
-pub use spawn_tooltip::*;
-pub use update_camera::*;
-pub use update_cursor_position::*;
-pub use update_in_game_ui_player_health::*;
-pub use update_in_game_ui_tooltip::*;
+pub mod prelude {
+    pub use crate::systems::build_game_over_ui::*;
+    pub use crate::systems::build_in_game_ui::*;
+    pub use crate::systems::build_victory_ui::*;
+    pub use crate::systems::hide_tooltip::*;
+    pub use crate::systems::load_assets::*;
+    pub use crate::systems::map_pos_to_trans::*;
+    pub use crate::systems::spawn_amulet_of_yala_sprite::*;
+    pub use crate::systems::spawn_camera::*;
+    pub use crate::systems::spawn_monster_sprites::*;
+    pub use crate::systems::spawn_player_sprite::*;
+    pub use crate::systems::spawn_tilemap::*;
+    pub use crate::systems::spawn_tooltip::*;
+    pub use crate::systems::update_camera::*;
+    pub use crate::systems::update_cursor_position::*;
+    pub use crate::systems::update_in_game_ui_player_health::*;
+    pub use crate::systems::update_in_game_ui_tooltip::*;
+}

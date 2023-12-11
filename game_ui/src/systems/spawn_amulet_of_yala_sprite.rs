@@ -3,7 +3,6 @@ use game_core::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn spawn_amulet_of_yala_sprite(
     mut commands: Commands,
     amulet_query: Query<Entity, With<AmuletOfYala>>,

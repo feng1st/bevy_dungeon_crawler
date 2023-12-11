@@ -3,8 +3,6 @@ use game_core::prelude::{Name, *};
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
-#[allow(clippy::cast_possible_truncation)]
 pub fn update_in_game_ui_tooltip(
     mut tooltip_style_query: Query<&mut Style, With<Tooltip>>,
     mut tooltip_text_query: Query<&mut Text, With<TooltipText>>,

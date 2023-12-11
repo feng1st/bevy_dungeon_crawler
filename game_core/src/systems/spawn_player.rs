@@ -2,12 +2,11 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn spawn_player(mut commands: Commands, mut query: Query<(&MapRoomList, &mut MapFigureGrid)>) {
     let Ok((map_room_list, mut map_figure_grid)) = query.get_single_mut() else {
         return;
     };
-    let player_pos = IVec2::from(map_room_list.0[0].center());
+    let player_pos = map_room_list.0[0].center();
     let entity = commands
         .spawn((
             Player,

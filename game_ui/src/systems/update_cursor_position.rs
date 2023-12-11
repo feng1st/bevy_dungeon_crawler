@@ -2,7 +2,6 @@ use bevy::{prelude::*, window::PrimaryWindow};
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn update_cursor_position(
     mut cursor_pos: ResMut<CursorPosition>,
     window_query: Query<&Window, With<PrimaryWindow>>,

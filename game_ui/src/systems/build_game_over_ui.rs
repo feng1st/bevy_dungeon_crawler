@@ -65,7 +65,7 @@ fn text_node(value: &str, font_size: f32, color: Color) -> TextBundle {
         value,
         TextStyle {
             font_size,
-            color: color.into(),
+            color,
             ..default()
         },
     )

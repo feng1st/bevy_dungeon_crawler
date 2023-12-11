@@ -20,7 +20,7 @@ pub fn spawn_amulet_of_yala(
         .filter_map(|pos| {
             PathFinder::find_cost(map_tile_grid, None, pos, player_pos.0).map(|cost| (pos, cost))
         })
-        .max_by(|(_, a), (_, b)| a.partial_cmp(b).unwrap())
+        .max_by(|(_, a), (_, b)| a.cmp(b))
         .map(|(pos, _)| pos)
     {
         amulet_res.0 = amulet_pos;

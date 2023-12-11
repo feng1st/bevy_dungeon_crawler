@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::too_many_arguments)]
 pub fn move_figure(
     mut pos_query: Query<&mut MapPos>,
     mut rest_query: Query<&mut Rest>,
@@ -16,7 +16,7 @@ pub fn move_figure(
 ) {
     for action in move_figure_event_reader.read() {
         // actor is gone
-        if !entity_query.get(action.actor).is_ok() {
+        if entity_query.get(action.actor).is_err() {
             continue;
         }
 
@@ -41,16 +41,8 @@ pub fn move_figure(
         // occupied
         if entity_query.get(target_entity).is_ok() {
             let target_is_player = player_query.get(target_entity).is_ok();
-            // attack
-            if actor_is_player != target_is_player {
-                apply_damage_event_writer.send(AttackAction {
-                    actor: action.actor,
-                    target: target_entity,
-                    damage: 1,
-                });
-            }
             // swap
-            else {
+            if actor_is_player == target_is_player {
                 let mut tmp_pos: Option<IVec2> = None;
                 if let Ok(mut pos) = pos_query.get_mut(action.actor) {
                     tmp_pos = Some(pos.0);
@@ -62,6 +54,14 @@ pub fn move_figure(
                     map_figure_grid.set(actor_pos, target_entity);
                     pos.0 = actor_pos;
                 }
+            }
+            // attack
+            else {
+                apply_damage_event_writer.send(AttackAction {
+                    actor: action.actor,
+                    target: target_entity,
+                    damage: 1,
+                });
             }
         }
         // empty, move

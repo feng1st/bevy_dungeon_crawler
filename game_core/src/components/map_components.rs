@@ -69,6 +69,7 @@ impl MapGrid<TileType> for MapTileGrid {
 }
 
 impl MapTileGrid {
+    #[must_use]
     pub fn fill(bound: IVec2, tile_type: TileType) -> Self {
         Self {
             bound,
@@ -76,16 +77,18 @@ impl MapTileGrid {
         }
     }
 
+    #[must_use]
     pub fn can_enter(&self, pos: IVec2) -> bool {
         self.get(pos) == TileType::Floor
     }
 
+    #[must_use]
     pub fn get(&self, pos: IVec2) -> TileType {
         self.get_at(pos).unwrap_or(TileType::Void)
     }
 
     pub fn set(&mut self, pos: IVec2, value: TileType) {
-        self.set_at(pos, value)
+        self.set_at(pos, value);
     }
 
     pub fn iter(&self, tile_type: TileType) -> impl Iterator<Item = IVec2> + '_ {
@@ -123,6 +126,7 @@ impl MapGrid<Entity> for MapFigureGrid {
 }
 
 impl MapFigureGrid {
+    #[must_use]
     pub fn new(bound: IVec2) -> Self {
         Self {
             bound,
@@ -130,12 +134,13 @@ impl MapFigureGrid {
         }
     }
 
+    #[must_use]
     pub fn get(&self, pos: IVec2) -> Entity {
         self.get_at(pos).unwrap_or(Entity::PLACEHOLDER)
     }
 
     pub fn set(&mut self, pos: IVec2, value: Entity) {
-        self.set_at(pos, value)
+        self.set_at(pos, value);
     }
 
     pub fn reset(&mut self, pos: IVec2) {

@@ -5,6 +5,7 @@ use pathfinding::prelude::*;
 pub struct PathFinder;
 
 impl PathFinder {
+    #[must_use]
     pub fn find_next_pos(
         map_tile_grid: &MapTileGrid,
         map_figure_grid: Option<&MapFigureGrid>,
@@ -16,6 +17,7 @@ impl PathFinder {
             .map(|path| path[1])
     }
 
+    #[must_use]
     pub fn find_path(
         map_tile_grid: &MapTileGrid,
         map_figure_grid: Option<&MapFigureGrid>,
@@ -26,6 +28,7 @@ impl PathFinder {
             .map(|(path, _)| path)
     }
 
+    #[must_use]
     pub fn find_cost(
         map_tile_grid: &MapTileGrid,
         map_figure_grid: Option<&MapFigureGrid>,
@@ -36,6 +39,7 @@ impl PathFinder {
             .map(|(_, cost)| cost)
     }
 
+    #[must_use]
     pub fn find_path_and_cost(
         map_tile_grid: &MapTileGrid,
         map_figure_grid: Option<&MapFigureGrid>,

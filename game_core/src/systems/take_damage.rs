@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn take_damage(
     mut victim_query: Query<(&mut Health, Option<&mut Rest>, &MapPos, Option<&Player>)>,
     mut map_query: Query<&mut MapFigureGrid>,

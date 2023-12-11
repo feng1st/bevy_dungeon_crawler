@@ -3,7 +3,6 @@ use game_core::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn update_in_game_ui_player_health(
     mut bar_query: Query<&mut Style, With<PlayerHealthBar>>,
     mut label_query: Query<&mut Text, With<PlayerHealthLabel>>,

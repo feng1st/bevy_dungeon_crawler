@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn take_rest(
     mut actor_query: Query<(&mut Rest, &mut Health)>,
     mut take_rest_event_reader: EventReader<RestAction>,

@@ -1,5 +1,3 @@
-#![warn(clippy::all, clippy::pedantic)]
-
 use bevy::prelude::*;
 use game_core::GameCorePlugin;
 use game_ui::GameUiPlugin;
@@ -19,7 +17,6 @@ fn main() {
 }
 
 #[cfg(debug_assertions)]
-#[allow(clippy::needless_pass_by_value)]
 fn print_entity_count(world: &World, mut timer: Local<u128>, time: Res<Time>) {
     *timer += time.delta().as_millis();
     if *timer > 1000 {
