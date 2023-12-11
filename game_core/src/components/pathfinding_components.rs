@@ -39,13 +39,19 @@ impl PathFinder {
 
         for (dx, dy) in directions {
             let neighbor_pos = pos + IVec2::new(dx, dy);
-            if tile_grid.can_enter(neighbor_pos) {
-                if figure_grid.is_some_and(|f| f.get(neighbor_pos) != Entity::PLACEHOLDER) {
-                    neighbors.push((neighbor_pos, 8));
-                } else {
-                    neighbors.push((neighbor_pos, 1));
-                }
+            if !tile_grid.can_enter(neighbor_pos) {
+                continue;
             }
+            neighbors.push((
+                neighbor_pos,
+                if figure_grid.is_some_and(|map_figure_grid| {
+                    map_figure_grid.get(neighbor_pos) != Entity::PLACEHOLDER
+                }) {
+                    8
+                } else {
+                    1
+                },
+            ));
         }
 
         neighbors

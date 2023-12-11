@@ -11,26 +11,28 @@ pub fn take_damage(
     mut next_game_state: ResMut<NextState<GameState>>,
 ) {
     for action in apply_damage_event_reader.read() {
-        if let Ok((mut victim_health, victim_rest, victim_pos, victim_is_player)) =
+        let Ok((mut victim_health, victim_rest, victim_pos, victim_is_player)) =
             victim_query.get_mut(action.target)
-        {
-            victim_health.current -= action.damage;
-            // interrupted
-            if let Some(mut victim_rest) = victim_rest {
-                victim_rest.current = 0;
+        else {
+            continue;
+        };
+
+        victim_health.current -= action.damage;
+        // interrupted
+        if let Some(mut victim_rest) = victim_rest {
+            victim_rest.current = 0;
+        }
+        if victim_health.current <= 0 {
+            // kill monster
+            if victim_is_player.is_none() {
+                if let Ok(mut map_figure_grid) = map_query.get_single_mut() {
+                    map_figure_grid.reset(victim_pos.0);
+                }
+                commands.entity(action.target).despawn();
             }
-            if victim_health.current <= 0 {
-                // kill monster
-                if victim_is_player.is_none() {
-                    if let Ok(mut map_figure_grid) = map_query.get_single_mut() {
-                        map_figure_grid.reset(victim_pos.0);
-                    }
-                    commands.entity(action.target).despawn();
-                }
-                // kill player
-                else {
-                    next_game_state.set(GameState::GameOver);
-                }
+            // kill player
+            else {
+                next_game_state.set(GameState::GameOver);
             }
         }
     }
