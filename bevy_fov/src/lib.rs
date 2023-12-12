@@ -10,25 +10,20 @@ use bevy::prelude::*;
 pub trait VisibilityMap {
     fn is_opaque(&self, p: IVec2) -> bool;
     fn is_in_bounds(&self, p: IVec2) -> bool;
-    fn set_visible(&mut self, p: IVec2);
     fn dist(&self, a: IVec2, b: IVec2) -> f32;
-}
-
-pub trait VisibilityMapUtility {
-    fn toggle_opaque(&mut self, p: IVec2);
-    fn toggle_visible(&mut self, p: IVec2);
-    fn clear_opaque(&mut self);
-    fn clear_visible(&mut self);
 }
 
 /// Module containing the compute function.
 pub mod fov {
+    use std::collections::HashSet;
+
     use crate::VisibilityMap;
-    use bevy::prelude::*;
+    use bevy::prelude::IVec2;
 
     /// Compute the fov in a map from the given position.
-    pub fn compute<T: VisibilityMap>(origin: IVec2, range: i32, map: &mut T) {
-        map.set_visible(origin);
+    pub fn compute<T: VisibilityMap>(origin: IVec2, range: i32, map: &T) -> HashSet<IVec2> {
+        let mut visible_tiles = HashSet::new();
+        visible_tiles.insert(origin);
 
         for octant in 0..8 {
             compute_octant(
@@ -39,10 +34,14 @@ pub mod fov {
                 Slope { x: 1, y: 1 },
                 Slope { x: 1, y: 0 },
                 map,
+                &mut visible_tiles,
             );
         }
+
+        visible_tiles
     }
 
+    #[allow(clippy::too_many_arguments)]
     fn compute_octant<T: VisibilityMap>(
         octant: i32,
         origin: IVec2,
@@ -50,10 +49,11 @@ pub mod fov {
         x: i32,
         mut top: Slope,
         mut bottom: Slope,
-        map: &mut T,
+        map: &T,
+        visible_tiles: &mut HashSet<IVec2>,
     ) {
         for x in x..=range {
-            let y_coords = compute_y_coordinate(octant, origin, x, map, &mut top, &mut bottom);
+            let y_coords = compute_y_coordinate(octant, origin, x, map, &top, &bottom);
 
             let top_y = y_coords.x;
             let bottom_y = y_coords.y;
@@ -68,6 +68,7 @@ pub mod fov {
                 map,
                 &mut top,
                 &mut bottom,
+                visible_tiles,
             ) {
                 break;
             }
@@ -78,9 +79,9 @@ pub mod fov {
         octant: i32,
         origin: IVec2,
         x: i32,
-        map: &mut T,
-        top: &mut Slope,
-        bottom: &mut Slope,
+        map: &T,
+        top: &Slope,
+        bottom: &Slope,
     ) -> IVec2 {
         let mut top_y;
         if top.x == 1 {
@@ -129,22 +130,16 @@ pub mod fov {
         octant: i32,
         origin: IVec2,
         x: i32,
-        map: &mut T,
+        map: &T,
         top: &mut Slope,
         bottom: &mut Slope,
+        visible_tiles: &mut HashSet<IVec2>,
     ) -> bool {
         let mut was_opaque = -1;
 
         for y in (bottom_y..=top_y).rev() {
             if range < 0 || map.dist(IVec2::ZERO, IVec2::new(x, y)) <= range as f32 {
                 let is_opaque = blocks_light(x, y, octant, origin, map);
-
-                // Less symmetrical
-                // let is_visible = is_opaque ||
-                // (
-                //     (y != top_y || top.greater(y * 4 - 1, x * 4 + 1)) &&
-                //     (y != bottom_y || bottom.less(y * 4 + 1, x * 4 - 1))
-                // );
 
                 // Better symmetry
                 let is_visible = is_opaque || // Remove is_opaque check for full symmetry but more artifacts in hallways
@@ -154,7 +149,9 @@ pub mod fov {
                 );
 
                 if is_visible {
-                    set_visible(x, y, octant, origin, map);
+                    if let Some(p) = set_visible(x, y, octant, origin, map) {
+                        visible_tiles.insert(p);
+                    }
                 }
 
                 if x != range {
@@ -178,6 +175,7 @@ pub mod fov {
                                     top.clone(),
                                     Slope { y: ny, x: nx },
                                     map,
+                                    visible_tiles,
                                 );
                             } else if y == bottom_y {
                                 return false;
@@ -205,13 +203,7 @@ pub mod fov {
         was_opaque == 0
     }
 
-    fn blocks_light<T: VisibilityMap>(
-        x: i32,
-        y: i32,
-        octant: i32,
-        origin: IVec2,
-        map: &mut T,
-    ) -> bool {
+    fn blocks_light<T: VisibilityMap>(x: i32, y: i32, octant: i32, origin: IVec2, map: &T) -> bool {
         let (mut nx, mut ny) = origin.into();
         match octant {
             0 => {
@@ -252,10 +244,16 @@ pub mod fov {
         if !map.is_in_bounds(p) {
             return true;
         }
-        map.is_opaque(IVec2::new(nx, ny))
+        map.is_opaque(p)
     }
 
-    fn set_visible<T: VisibilityMap>(x: i32, y: i32, octant: i32, origin: IVec2, map: &mut T) {
+    fn set_visible<T: VisibilityMap>(
+        x: i32,
+        y: i32,
+        octant: i32,
+        origin: IVec2,
+        map: &T,
+    ) -> Option<IVec2> {
         let (mut nx, mut ny) = origin.into();
         match octant {
             0 => {
@@ -294,7 +292,9 @@ pub mod fov {
         }
         let p = IVec2::new(nx, ny);
         if map.is_in_bounds(p) {
-            map.set_visible(p);
+            Some(p)
+        } else {
+            None
         }
     }
 
@@ -314,11 +314,6 @@ pub mod fov {
         pub fn greater_or_equal(&self, y: i32, x: i32) -> bool {
             self.y * x >= self.x * y
         }
-
-        // s < y/x
-        //pub fn less(&self, y: i32, x: i32) -> bool {
-        //    self.y * x < self.x * y
-        //}
 
         pub fn less_or_equal(&self, y: i32, x: i32) -> bool {
             self.y * x <= self.x * y

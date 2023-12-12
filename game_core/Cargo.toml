@@ -9,6 +9,7 @@ edition = "2021"
 bevy.workspace = true
 rand.workspace = true
 pathfinding.workspace = true
+bevy_fov = { path = "../bevy_fov" }
 
 [lints]
 workspace = true

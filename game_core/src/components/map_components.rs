@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_fov::VisibilityMap;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum TileType {
@@ -65,6 +66,20 @@ impl MapGrid<TileType> for MapTileGrid {
 
     fn set_element(&mut self, index: usize, value: TileType) {
         self.tiles[index] = value;
+    }
+}
+
+impl VisibilityMap for MapTileGrid {
+    fn is_opaque(&self, p: IVec2) -> bool {
+        self.get(p) != TileType::Floor
+    }
+
+    fn is_in_bounds(&self, p: IVec2) -> bool {
+        self.in_bounds(p)
+    }
+
+    fn dist(&self, a: IVec2, b: IVec2) -> f32 {
+        Vec2::new(a.x as f32, a.y as f32).distance(Vec2::new(b.x as f32, b.y as f32))
     }
 }
 

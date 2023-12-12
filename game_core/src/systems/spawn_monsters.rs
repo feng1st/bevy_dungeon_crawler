@@ -35,6 +35,7 @@ pub fn spawn_monsters(
                 },
                 SimpleAI,
                 MapPos(map_pos),
+                FieldOfView::new(6),
             ))
             .id();
         map_figure_grid.set(map_pos, entity);
