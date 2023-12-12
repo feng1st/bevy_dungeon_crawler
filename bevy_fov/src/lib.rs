@@ -3,114 +3,31 @@
 //! [![docs](https://docs.rs/adam_fov_rs/badge.svg)](https://docs.rs/adam_fov_rs/)
 //!
 //! An implementation of [Adam Millazo's FOV algorithm](http://www.adammil.net/blog/v125_Roguelike_Vision_Algorithms.html#mine)
-//!
-//! To use it you must implement the [VisibilityMap] trait on your map type, or use
-//! the build in [VisibilityMap2d]. Then you can call [fov::compute] with your map
-//! which will populate visible tiles based on the map's opaque tiles.
-//!
-//! # Example
-//! ```rust
-//! use adam_fov_rs::*;
-//!
-//! // Create a 50x50 visibility map
-//! let mut map = VisibilityMap2d::default([50,50]);
-//!
-//! // Set the tile at (15,15) to opaque
-//! map[[15,15]].opaque = true;
-//!
-//! // Compute our visible tiles and add them to the map
-//! fov::compute([15,14], 5, &mut map);
-//!
-//! // The space directly above our opaque tile is not visible
-//! assert!(map[[15,16]].visible == false);
-//! ```
-//!
-//! *Taken from the terminal example*
-//! ![](images/fov.gif)
 
-pub use glam::IVec2;
-use glam::Vec2;
-use sark_grids::Grid;
-pub use sark_grids::GridPoint;
-
-pub type VisibilityMap2d = Grid<VisibilityPoint>;
+use bevy::prelude::*;
 
 /// A trait used by the fov algorithm to calculate the resulting fov.
 pub trait VisibilityMap {
-    fn is_opaque(&self, p: impl GridPoint) -> bool;
-    fn is_in_bounds(&self, p: impl GridPoint) -> bool;
-    fn set_visible(&mut self, p: impl GridPoint);
-    fn dist(&self, a: impl GridPoint, b: impl GridPoint) -> f32;
-}
-
-#[derive(Default, Debug, Clone, Copy)]
-pub struct VisibilityPoint {
-    pub visible: bool,
-    pub opaque: bool,
-}
-
-impl VisibilityMap for VisibilityMap2d {
-    fn is_opaque(&self, p: impl GridPoint) -> bool {
-        if self.in_bounds(p) {
-            self[p].opaque
-        } else {
-            true
-        }
-    }
-
-    fn is_in_bounds(&self, p: impl GridPoint) -> bool {
-        self.in_bounds(p)
-    }
-
-    fn set_visible(&mut self, p: impl GridPoint) {
-        if self.in_bounds(p) {
-            self[p].visible = true;
-        }
-    }
-
-    fn dist(&self, a: impl GridPoint, b: impl GridPoint) -> f32 {
-        Vec2::distance(a.as_vec2(), b.as_vec2())
-    }
+    fn is_opaque(&self, p: IVec2) -> bool;
+    fn is_in_bounds(&self, p: IVec2) -> bool;
+    fn set_visible(&mut self, p: IVec2);
+    fn dist(&self, a: IVec2, b: IVec2) -> f32;
 }
 
 pub trait VisibilityMapUtility {
-    fn toggle_opaque(&mut self, p: impl GridPoint);
-    fn toggle_visible(&mut self, p: impl GridPoint);
+    fn toggle_opaque(&mut self, p: IVec2);
+    fn toggle_visible(&mut self, p: IVec2);
     fn clear_opaque(&mut self);
     fn clear_visible(&mut self);
 }
 
-impl VisibilityMapUtility for VisibilityMap2d {
-    fn toggle_opaque(&mut self, p: impl GridPoint) {
-        let i = self.pos_to_index(p);
-        self[i].opaque = !self[i].opaque;
-    }
-
-    fn toggle_visible(&mut self, p: impl GridPoint) {
-        let i = self.pos_to_index(p);
-        self[i].visible = !self[i].visible;
-    }
-
-    /// Clear all opaque tiles from the map
-    fn clear_opaque(&mut self) {
-        self.iter_mut().for_each(|p| p.opaque = false);
-    }
-
-    /// Clear all visible tiles from the map
-    fn clear_visible(&mut self) {
-        self.iter_mut().for_each(|p| p.visible = false);
-    }
-}
-
 /// Module containing the compute function.
 pub mod fov {
-    use glam::IVec2;
-
-    use crate::{GridPoint, VisibilityMap};
+    use crate::VisibilityMap;
+    use bevy::prelude::*;
 
     /// Compute the fov in a map from the given position.
-    pub fn compute<T: VisibilityMap>(origin: impl GridPoint, range: i32, map: &mut T) {
-        let origin = origin.as_ivec2();
+    pub fn compute<T: VisibilityMap>(origin: IVec2, range: i32, map: &mut T) {
         map.set_visible(origin);
 
         for octant in 0..8 {
@@ -122,7 +39,7 @@ pub mod fov {
                 Slope { x: 1, y: 1 },
                 Slope { x: 1, y: 0 },
                 map,
-            )
+            );
         }
     }
 
@@ -252,17 +169,16 @@ pub mod fov {
                                 if y == bottom_y {
                                     *bottom = Slope { y: ny, x: nx };
                                     break;
-                                } else {
-                                    compute_octant(
-                                        octant,
-                                        origin,
-                                        range,
-                                        x + 1,
-                                        top.clone(),
-                                        Slope { y: ny, x: nx },
-                                        map,
-                                    );
                                 }
+                                compute_octant(
+                                    octant,
+                                    origin,
+                                    range,
+                                    x + 1,
+                                    top.clone(),
+                                    Slope { y: ny, x: nx },
+                                    map,
+                                );
                             } else if y == bottom_y {
                                 return false;
                             }
@@ -407,27 +323,5 @@ pub mod fov {
         pub fn less_or_equal(&self, y: i32, x: i32) -> bool {
             self.y * x <= self.x * y
         } // this <= y/x
-    }
-}
-
-#[cfg(test)]
-mod test {
-
-    use crate::*;
-
-    #[test]
-    fn test_fov() {
-        let mut map = VisibilityMap2d::default([30, 30]);
-        map[[0, 1]].opaque = true;
-        map[[1, 0]].opaque = true;
-        fov::compute([0, 0], 5, &mut map);
-
-        assert!(map[[0, 0]].visible);
-
-        assert!(map[[0, 1]].visible);
-        assert!(!map[[0, 2]].visible);
-
-        assert!(map[[1, 0]].visible);
-        assert!(!map[[2, 0]].visible);
     }
 }
