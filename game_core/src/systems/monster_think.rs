@@ -2,8 +2,7 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-const CHASING_DISTANCE_SQUARED: i32 = 20 * 20;
-const WANDERING_DISTANCE_SQUARED: i32 = 40 * 40;
+const WANDERING_DISTANCE_SQUARED: i32 = 30 * 30;
 
 #[allow(clippy::type_complexity)]
 pub fn monster_think(
@@ -12,6 +11,7 @@ pub fn monster_think(
         (
             Entity,
             &MapPos,
+            &FieldOfView,
             Option<&WanderingMind>,
             Option<&ChasingMind>,
         ),
@@ -19,16 +19,20 @@ pub fn monster_think(
     >,
     player_query: Query<&MapPos, (With<Player>, Without<Monster>)>,
 ) {
-    let mut target: Option<IVec2> = None;
-    if let Ok(pos) = player_query.get_single() {
-        target = Some(pos.0);
-    }
+    let player_pos = player_query.get_single().map(|x| x.0);
 
-    for (entity, pos, wandering_mind, chasing_mind) in &monster_query {
+    for (entity, pos, field_of_view, wandering_mind, chasing_mind) in &monster_query {
         let mut entity_commands = commands.entity(entity);
-        if let Some(player_pos) = target {
-            let distance_squared = pos.0.distance_squared(player_pos);
-            if distance_squared < CHASING_DISTANCE_SQUARED {
+
+        // init wandering
+        if wandering_mind.is_none() && chasing_mind.is_none() {
+            entity_commands.insert(WanderingMind);
+            continue;
+        }
+
+        if let Ok(player_pos) = player_pos {
+            // player is in sight
+            if field_of_view.visible_tiles.contains(&player_pos) {
                 // switch to chasing
                 if wandering_mind.is_some() {
                     entity_commands.remove::<WanderingMind>();
@@ -36,7 +40,9 @@ pub fn monster_think(
                 if chasing_mind.is_none() {
                     entity_commands.insert(ChasingMind);
                 }
-            } else if distance_squared > WANDERING_DISTANCE_SQUARED {
+            }
+            // player is far away
+            else if pos.0.distance_squared(player_pos) > WANDERING_DISTANCE_SQUARED {
                 // switch to wandering
                 if chasing_mind.is_some() {
                     entity_commands.remove::<ChasingMind>();
@@ -44,13 +50,10 @@ pub fn monster_think(
                 if wandering_mind.is_none() {
                     entity_commands.insert(WanderingMind);
                 }
-            } else {
-                // init wandering
-                if wandering_mind.is_none() && chasing_mind.is_none() {
-                    entity_commands.insert(WanderingMind);
-                }
             }
-        } else {
+        }
+        // player is not present yet
+        else {
             // switch to wandering
             if chasing_mind.is_some() {
                 entity_commands.remove::<ChasingMind>();
