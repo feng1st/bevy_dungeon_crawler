@@ -73,7 +73,7 @@ impl Plugin for GameUiPlugin {
                 Update,
                 (
                     update_tilemap_fov,
-                    update_monster_fov,
+                    update_non_player_fov.after(update_tilemap_fov),
                     map_pos_to_trans,
                     update_camera.after(map_pos_to_trans),
                     update_cursor_position.after(update_camera),

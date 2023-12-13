@@ -8,7 +8,7 @@ pub fn update_tilemap_fov(
         (&FieldOfView, &mut LastFieldOfView),
         (With<Player>, Changed<FieldOfView>),
     >,
-    mut tilemap_query: Query<&mut TileStorage>,
+    mut tilemap_query: Query<&mut TileStorage, Without<Delete>>,
     mut tile_query: Query<&mut TileVisible>,
 ) {
     let Ok(tile_storage) = tilemap_query.get_single_mut() else {

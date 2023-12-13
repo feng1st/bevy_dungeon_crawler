@@ -2,9 +2,9 @@ use bevy::prelude::*;
 use game_core::prelude::*;
 
 #[allow(clippy::type_complexity)]
-pub fn update_monster_fov(
+pub fn update_non_player_fov(
     player_query: Query<&FieldOfView, With<Player>>,
-    mut monster_query: Query<(&MapPos, &mut Visibility), With<Monster>>,
+    mut monster_query: Query<(&MapPos, &mut Visibility), Without<Player>>,
 ) {
     let Ok(field_of_view) = player_query.get_single() else {
         return;
