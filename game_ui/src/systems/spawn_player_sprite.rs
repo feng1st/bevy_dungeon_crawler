@@ -3,7 +3,6 @@ use game_core::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn spawn_player_sprite(
     mut commands: Commands,
     player_query: Query<Entity, With<Player>>,

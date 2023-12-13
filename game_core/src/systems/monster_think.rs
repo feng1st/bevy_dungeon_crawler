@@ -5,7 +5,7 @@ use crate::prelude::*;
 const CHASING_DISTANCE_SQUARED: i32 = 20 * 20;
 const WANDERING_DISTANCE_SQUARED: i32 = 40 * 40;
 
-#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::type_complexity)]
 pub fn monster_think(
     mut commands: Commands,
     monster_query: Query<

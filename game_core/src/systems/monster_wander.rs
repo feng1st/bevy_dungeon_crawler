@@ -3,7 +3,7 @@ use rand::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
+#[allow(clippy::type_complexity)]
 pub fn monster_wander(
     mut move_figure_event_writer: EventWriter<MoveAction>,
     query: Query<(Entity, &MapPos), (With<Monster>, With<WanderingMind>)>,

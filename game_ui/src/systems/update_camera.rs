@@ -3,7 +3,6 @@ use game_core::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn update_camera(
     mut camera_query: Query<&mut Transform, (With<MainCamera>, Without<Player>)>,
     player_query: Query<&Transform, (With<Player>, Changed<Transform>)>,

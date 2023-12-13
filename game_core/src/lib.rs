@@ -1,5 +1,3 @@
-#![warn(clippy::all, clippy::pedantic)]
-
 pub mod prelude {
     pub use crate::components::*;
     pub use crate::systems::*;
@@ -69,30 +67,30 @@ pub struct GameCorePlugin;
 
 impl Plugin for GameCorePlugin {
     fn build(&self, app: &mut App) {
-        self.register_states(app);
-        self.register_events(app);
-        self.init_resources(app);
-        self.config_system_sets(app);
-        self.add_core_game_systems(app);
+        GameCorePlugin::register_states(app);
+        GameCorePlugin::register_events(app);
+        GameCorePlugin::init_resources(app);
+        GameCorePlugin::config_system_sets(app);
+        GameCorePlugin::add_core_game_systems(app);
     }
 }
 
 impl GameCorePlugin {
-    fn register_states(&self, app: &mut App) {
+    fn register_states(app: &mut App) {
         app.add_state::<GameState>().add_state::<GameTurn>();
     }
 
-    fn register_events(&self, app: &mut App) {
+    fn register_events(app: &mut App) {
         app.add_event::<MoveAction>()
             .add_event::<AttackAction>()
             .add_event::<RestAction>();
     }
 
-    fn init_resources(&self, app: &mut App) {
+    fn init_resources(app: &mut App) {
         app.init_resource::<AmuletOfYalaPos>();
     }
 
-    fn config_system_sets(&self, app: &mut App) {
+    fn config_system_sets(app: &mut App) {
         app.configure_sets(
             Startup,
             (
@@ -177,7 +175,7 @@ impl GameCorePlugin {
         );
     }
 
-    fn add_core_game_systems(&self, app: &mut App) {
+    fn add_core_game_systems(app: &mut App) {
         app.add_systems(
             OnEnter(GameState::InGame),
             (

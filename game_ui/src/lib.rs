@@ -1,5 +1,3 @@
-#![warn(clippy::all, clippy::pedantic)]
-
 pub mod prelude {
     pub use crate::components::*;
 }
@@ -11,7 +9,7 @@ use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 use game_core::prelude::*;
 use prelude::*;
-use systems::*;
+use systems::prelude::*;
 
 pub struct GameUiPlugin;
 

@@ -2,7 +2,6 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn load_assets(
     mut commands: Commands,
     asset_server: Res<AssetServer>,

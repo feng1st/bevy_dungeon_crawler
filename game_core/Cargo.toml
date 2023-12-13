@@ -6,15 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# FIXME: remove dynamic_linking upon releasing
-bevy = { version = "^0.12", features = ["dynamic_linking"] }
-rand = "^0.8"
-pathfinding = "^4.4"
+bevy.workspace = true
+rand.workspace = true
+pathfinding.workspace = true
 
-# Enable a small amount of optimization in debug mode
-[profile.dev]
-opt-level = 1
-
-# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
-[profile.dev.package."*"]
-opt-level = 3
+[lints]
+workspace = true
