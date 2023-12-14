@@ -69,7 +69,6 @@ impl Plugin for GameCorePlugin {
     fn build(&self, app: &mut App) {
         GameCorePlugin::register_states(app);
         GameCorePlugin::register_events(app);
-        GameCorePlugin::init_resources(app);
         GameCorePlugin::config_system_sets(app);
         GameCorePlugin::add_core_game_systems(app);
     }
@@ -84,10 +83,6 @@ impl GameCorePlugin {
         app.add_event::<MoveAction>()
             .add_event::<AttackAction>()
             .add_event::<RestAction>();
-    }
-
-    fn init_resources(app: &mut App) {
-        app.init_resource::<AmuletOfYalaPos>();
     }
 
     fn config_system_sets(app: &mut App) {
@@ -196,9 +191,7 @@ impl GameCorePlugin {
                 apply_deferred
                     .after(build_map)
                     .before(spawn_player)
-                    .before(spawn_monsters),
-                apply_deferred
-                    .after(spawn_player)
+                    .before(spawn_monsters)
                     .before(spawn_amulet_of_yala),
             )
                 .in_set(CoreSystemSet::OnInGameSetupData),

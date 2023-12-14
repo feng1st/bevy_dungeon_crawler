@@ -164,4 +164,10 @@ impl MapFigureGrid {
 }
 
 #[derive(Component)]
-pub struct MapRoomList(pub Vec<IRect>);
+pub struct PlayerStart(pub IVec2);
+
+#[derive(Component)]
+pub struct AmuletStart(pub IVec2);
+
+#[derive(Component)]
+pub struct MonsterSpawns(pub Vec<IVec2>);

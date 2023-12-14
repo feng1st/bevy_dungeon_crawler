@@ -5,17 +5,15 @@ use crate::prelude::*;
 
 pub fn spawn_monsters(
     mut commands: Commands,
-    mut query: Query<(&MapRoomList, &mut MapFigureGrid)>,
+    mut query: Query<(&MonsterSpawns, &mut MapFigureGrid)>,
 ) {
     let mut rng = rand::thread_rng();
 
-    let Ok((map_room_list, mut map_figure_grid)) = query.get_single_mut() else {
+    let Ok((monster_spawns, mut map_figure_grid)) = query.get_single_mut() else {
         return;
     };
 
-    for room in map_room_list.0.iter().skip(1) {
-        let map_pos = room.center();
-
+    for monster_spawn in &monster_spawns.0 {
         let monster_id = match rng.gen_range(0..20) {
             0..=1 => 0,
             2..=5 => 1,
@@ -34,10 +32,10 @@ pub fn spawn_monsters(
                     max: health,
                 },
                 SimpleAI,
-                MapPos(map_pos),
+                MapPos(*monster_spawn),
                 FieldOfView::new(10),
             ))
             .id();
-        map_figure_grid.set(map_pos, entity);
+        map_figure_grid.set(*monster_spawn, entity);
     }
 }
