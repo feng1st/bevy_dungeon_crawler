@@ -2,6 +2,8 @@ use bevy::prelude::*;
 
 use crate::prelude::*;
 
+const KEYSTROKE_INTERVAL_MIN: u128 = 150;
+
 pub fn player_input(
     mut move_figure_event_writer: EventWriter<MoveAction>,
     mut take_rest_event_writer: EventWriter<RestAction>,
@@ -30,7 +32,7 @@ pub fn player_input(
     } else {
         return;
     } {
-        if *timer < 100 {
+        if *timer < KEYSTROKE_INTERVAL_MIN {
             return;
         }
         *timer = 0;

@@ -19,6 +19,8 @@ pub fn spawn_player(mut commands: Commands, mut query: Query<(&MapRoomList, &mut
                 max: 10,
             },
             MapPos(player_pos),
+            FieldOfView::new(8),
+            LastFieldOfView::default(),
         ))
         .id();
     map_figure_grid.set(player_pos, entity);

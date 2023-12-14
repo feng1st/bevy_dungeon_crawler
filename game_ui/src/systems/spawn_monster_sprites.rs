@@ -18,6 +18,7 @@ pub fn spawn_monster_sprites(
                 y: 0.,
                 z: 2.,
             }),
+            visibility: Visibility::Hidden,
             ..default()
         });
     }

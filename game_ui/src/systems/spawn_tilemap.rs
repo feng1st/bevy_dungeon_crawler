@@ -30,6 +30,7 @@ pub fn spawn_tilemap(
                             },
                         ),
                         tilemap_id: TilemapId(entity),
+                        visible: TileVisible(false),
                         ..Default::default()
                     })
                     .id();

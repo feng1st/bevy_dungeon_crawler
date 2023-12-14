@@ -1,5 +1,5 @@
 [package]
-name = "game_core"
+name = "bevy_fov"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,9 +7,6 @@ edition = "2021"
 
 [dependencies]
 bevy.workspace = true
-rand.workspace = true
-pathfinding.workspace = true
-bevy_fov = { path = "../bevy_fov" }
 
 [lints]
 workspace = true

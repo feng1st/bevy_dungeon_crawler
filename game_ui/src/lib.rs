@@ -72,6 +72,8 @@ impl Plugin for GameUiPlugin {
             .add_systems(
                 Update,
                 (
+                    update_tilemap_fov,
+                    update_non_player_fov.after(update_tilemap_fov),
                     map_pos_to_trans,
                     update_camera.after(map_pos_to_trans),
                     update_cursor_position.after(update_camera),

@@ -17,10 +17,18 @@ fn main() {
 }
 
 #[cfg(debug_assertions)]
-fn print_entity_count(world: &World, mut timer: Local<u128>, time: Res<Time>) {
+fn print_entity_count(
+    world: &World,
+    mut timer: Local<u128>,
+    mut last_count: Local<u32>,
+    time: Res<Time>,
+) {
     *timer += time.delta().as_millis();
     if *timer > 1000 {
         *timer = 0;
-        println!("Entity count: {}", world.entities().len());
+        if world.entities().len() != *last_count {
+            println!("Entity count: {}", world.entities().len());
+            *last_count = world.entities().len();
+        }
     }
 }

@@ -1,5 +1,5 @@
 [workspace]
-members = ["game_core", "game_ui", "game_starter"]
+members = ["bevy_fov", "game_core", "game_ui", "game_starter"]
 default-members = ["game_starter"]
 resolver = "2"
 

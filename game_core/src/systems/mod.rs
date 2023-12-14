@@ -1,4 +1,5 @@
 mod build_map;
+mod calc_fov;
 mod end_turn;
 mod monster_chase_player;
 mod monster_think;
@@ -15,6 +16,7 @@ mod take_damage;
 mod take_rest;
 
 pub use build_map::*;
+pub use calc_fov::*;
 pub use end_turn::*;
 pub use monster_chase_player::*;
 pub use monster_think::*;
