@@ -9,9 +9,8 @@ pub fn move_figure(
     entity_query: Query<Entity>,
     player_query: Query<&Player>,
     mut apply_damage_event_writer: EventWriter<AttackAction>,
-    mut map_query: Query<(&MapTileGrid, &mut MapFigureGrid)>,
+    mut map_query: Query<(&AmuletStart, &MapTileGrid, &mut MapFigureGrid)>,
     mut move_figure_event_reader: EventReader<MoveAction>,
-    amulet_res: Res<AmuletOfYalaPos>,
     mut next_game_state: ResMut<NextState<GameState>>,
 ) {
     for action in move_figure_event_reader.read() {
@@ -28,7 +27,8 @@ pub fn move_figure(
         }
 
         // on map
-        let Ok((map_tile_grid, mut map_figure_grid)) = map_query.get_single_mut() else {
+        let Ok((amulet_start, map_tile_grid, mut map_figure_grid)) = map_query.get_single_mut()
+        else {
             continue;
         };
 
@@ -72,7 +72,7 @@ pub fn move_figure(
                 actor_pos.0 = action.target_pos;
             }
 
-            if actor_is_player && action.target_pos == amulet_res.0 {
+            if actor_is_player && action.target_pos == amulet_start.0 {
                 next_game_state.set(GameState::Victory);
             }
         }
