@@ -15,5 +15,9 @@ pub fn build_map(mut commands: Commands) {
         _ => &EmptyMapBuilder,
     };
 
-    commands.spawn((Map, map_builder.build(MAP_BOUND)));
+    let mut map_bundle = map_builder.build(MAP_BOUND);
+
+    try_apply_prefab(&mut map_bundle, 20);
+
+    commands.spawn((Map, map_bundle));
 }

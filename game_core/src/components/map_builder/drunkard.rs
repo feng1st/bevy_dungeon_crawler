@@ -8,16 +8,7 @@ const MONSTER_NUM: usize = 19;
 pub struct DrunkardMapBuilder;
 
 impl MapBuilder for DrunkardMapBuilder {
-    fn build(
-        &self,
-        bound: IVec2,
-    ) -> (
-        MapTileGrid,
-        MapFigureGrid,
-        PlayerStart,
-        AmuletStart,
-        MonsterSpawns,
-    ) {
+    fn build(&self, bound: IVec2) -> MapBundle {
         let mut rng = rand::thread_rng();
 
         let mut map_tile_grid = MapTileGrid::fill(bound, TileType::Wall);
@@ -53,13 +44,13 @@ impl MapBuilder for DrunkardMapBuilder {
             }
         }
 
-        (
+        MapBundle {
             map_tile_grid,
-            MapFigureGrid::new(bound),
-            PlayerStart(player_start),
-            AmuletStart(amulet_start),
-            MonsterSpawns(monster_spawns),
-        )
+            map_figure_grid: MapFigureGrid::new(bound),
+            player_start: PlayerStart(player_start),
+            amulet_start: AmuletStart(amulet_start),
+            monster_spawns: MonsterSpawns(monster_spawns),
+        }
     }
 }
 

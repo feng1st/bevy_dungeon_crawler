@@ -171,3 +171,12 @@ pub struct AmuletStart(pub IVec2);
 
 #[derive(Component)]
 pub struct MonsterSpawns(pub Vec<IVec2>);
+
+#[derive(Bundle)]
+pub struct MapBundle {
+    pub map_tile_grid: MapTileGrid,
+    pub map_figure_grid: MapFigureGrid,
+    pub player_start: PlayerStart,
+    pub amulet_start: AmuletStart,
+    pub monster_spawns: MonsterSpawns,
+}
