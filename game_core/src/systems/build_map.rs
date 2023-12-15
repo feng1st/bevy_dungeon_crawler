@@ -9,7 +9,9 @@ pub fn build_map(mut commands: Commands) {
     let mut rng = rand::thread_rng();
 
     let map_builder: &dyn MapBuilder = match rng.gen_range(0..10) {
-        0..=7 => &DungeonMapBuilder,
+        0..=2 => &DungeonMapBuilder,
+        3..=5 => &AutomataMapBuilder,
+        6..=8 => &DrunkardMapBuilder,
         _ => &EmptyMapBuilder,
     };
 

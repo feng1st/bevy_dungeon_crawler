@@ -3,7 +3,7 @@ use rand::prelude::*;
 
 use crate::prelude::*;
 
-const ROOM_NUM: usize = 20;
+const MONSTER_NUM: usize = 19;
 
 pub struct EmptyMapBuilder;
 
@@ -34,9 +34,13 @@ impl MapBuilder for EmptyMapBuilder {
             .map(|(pos, _)| pos)
             .unwrap();
 
-        let monster_spawns = (1..ROOM_NUM)
-            .map(|_| IVec2::new(rng.gen_range(0..bound.x), rng.gen_range(0..bound.y)))
-            .collect();
+        let mut monster_spawns = vec![];
+        while monster_spawns.len() < MONSTER_NUM {
+            let pos = IVec2::new(rng.gen_range(0..bound.x), rng.gen_range(0..bound.y));
+            if map_tile_grid.can_enter(pos) {
+                monster_spawns.push(pos);
+            }
+        }
 
         (
             map_tile_grid,
