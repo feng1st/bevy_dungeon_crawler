@@ -67,7 +67,8 @@ impl Plugin for GameUiPlugin {
             )
             .add_systems(
                 Update,
-                update_in_game_ui_player_health.in_set(UiSystemSet::InGameUpdateUi),
+                (update_in_game_ui_player_health, update_in_game_ui_inventory)
+                    .in_set(UiSystemSet::InGameUpdateUi),
             )
             .add_systems(
                 Update,

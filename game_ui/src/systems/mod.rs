@@ -13,6 +13,7 @@ mod spawn_tilemap;
 mod spawn_tooltip;
 mod update_camera;
 mod update_cursor_position;
+mod update_in_game_ui_inventory;
 mod update_in_game_ui_player_health;
 mod update_in_game_ui_tooltip;
 mod update_non_player_fov;
@@ -34,6 +35,7 @@ pub mod prelude {
     pub use crate::systems::spawn_tooltip::*;
     pub use crate::systems::update_camera::*;
     pub use crate::systems::update_cursor_position::*;
+    pub use crate::systems::update_in_game_ui_inventory::*;
     pub use crate::systems::update_in_game_ui_player_health::*;
     pub use crate::systems::update_in_game_ui_tooltip::*;
     pub use crate::systems::update_non_player_fov::*;
