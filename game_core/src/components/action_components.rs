@@ -17,3 +17,9 @@ pub struct AttackAction {
 pub struct RestAction {
     pub actor: Entity,
 }
+
+#[derive(Event)]
+pub struct PickupAction {
+    pub actor: Entity,
+    pub target_pos: IVec2,
+}

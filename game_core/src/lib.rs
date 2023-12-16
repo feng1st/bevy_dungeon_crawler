@@ -82,7 +82,8 @@ impl GameCorePlugin {
     fn register_events(app: &mut App) {
         app.add_event::<MoveAction>()
             .add_event::<AttackAction>()
-            .add_event::<RestAction>();
+            .add_event::<RestAction>()
+            .add_event::<PickupAction>();
     }
 
     fn config_system_sets(app: &mut App) {
