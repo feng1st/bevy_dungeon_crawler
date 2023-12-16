@@ -41,7 +41,7 @@ impl Plugin for GameUiPlugin {
                     spawn_tilemap,
                     spawn_player_sprite,
                     spawn_monster_sprites,
-                    spawn_amulet_of_yala_sprite,
+                    spawn_item_sprites,
                 )
                     .in_set(UiSystemSet::OnInGameSetupSprites),
             )
