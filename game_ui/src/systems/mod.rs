@@ -4,6 +4,7 @@ mod build_victory_ui;
 mod hide_tooltip;
 mod load_assets;
 mod map_pos_to_trans;
+mod remove_sprite_from_map;
 mod spawn_camera;
 mod spawn_item_sprites;
 mod spawn_monster_sprites;
@@ -24,6 +25,7 @@ pub mod prelude {
     pub use crate::systems::hide_tooltip::*;
     pub use crate::systems::load_assets::*;
     pub use crate::systems::map_pos_to_trans::*;
+    pub use crate::systems::remove_sprite_from_map::*;
     pub use crate::systems::spawn_camera::*;
     pub use crate::systems::spawn_item_sprites::*;
     pub use crate::systems::spawn_monster_sprites::*;

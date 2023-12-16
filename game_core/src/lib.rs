@@ -213,6 +213,7 @@ impl GameCorePlugin {
                 take_damage.after(move_figure),
                 take_rest.after(take_damage),
                 calc_fov.after(move_figure),
+                pickup_item,
             )
                 .in_set(CoreSystemSet::InGameUpdateData),
         )

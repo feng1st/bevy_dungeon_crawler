@@ -78,6 +78,7 @@ impl Plugin for GameUiPlugin {
                     update_camera.after(map_pos_to_trans),
                     update_cursor_position.after(update_camera),
                     update_in_game_ui_tooltip.after(update_cursor_position),
+                    remove_sprite_from_map,
                 )
                     .in_set(UiSystemSet::InGameUpdateSprites),
             );
