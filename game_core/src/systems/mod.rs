@@ -15,6 +15,7 @@ mod system_cleanup;
 mod system_pre_cleanup;
 mod take_damage;
 mod take_rest;
+mod use_item;
 
 pub use build_map::*;
 pub use calc_fov::*;
@@ -33,3 +34,4 @@ pub use system_cleanup::*;
 pub use system_pre_cleanup::*;
 pub use take_damage::*;
 pub use take_rest::*;
+pub use use_item::*;

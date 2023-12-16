@@ -14,7 +14,7 @@ pub const ITEM_TABLE: &[(&str, usize, &[ItemTrait])] = &[
     (
         "Healing Potion",
         '!' as usize,
-        &[ItemTrait::ProvidesHealing { amount: 10 }],
+        &[ItemTrait::ProvidesHealing { amount: 6 }],
     ),
     (
         "Dungeon Map",
