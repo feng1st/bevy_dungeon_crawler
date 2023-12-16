@@ -6,10 +6,10 @@ use crate::prelude::*;
 
 pub fn spawn_tilemap(
     mut commands: Commands,
-    query: Query<&MapTileGrid>,
+    query: Query<(&MapTileGrid, &MapThemeComponent)>,
     main_texture: Res<MainTexture>,
 ) {
-    if let Ok(map_tile_grid) = query.get_single() {
+    if let Ok((map_tile_grid, map_theme)) = query.get_single() {
         let tilemap_size = TilemapSize {
             x: map_tile_grid.bound.x as u32,
             y: map_tile_grid.bound.y as u32,
@@ -19,21 +19,18 @@ pub fn spawn_tilemap(
         for x in 0..tilemap_size.x {
             for y in 0..tilemap_size.y {
                 let tile_pos = TilePos { x, y };
-                let tile_entity = commands
-                    .spawn(TileBundle {
-                        position: tile_pos,
-                        texture_index: TileTextureIndex(
-                            match map_tile_grid.get(IVec2::new(x as i32, y as i32)) {
-                                TileType::Floor => '.' as u32,
-                                TileType::Wall => '#' as u32,
-                                TileType::Void => 0,
-                            },
-                        ),
-                        tilemap_id: TilemapId(entity),
-                        visible: TileVisible(false),
-                        ..Default::default()
-                    })
-                    .id();
+                let tile_entity =
+                    commands
+                        .spawn(TileBundle {
+                            position: tile_pos,
+                            texture_index: TileTextureIndex(map_theme.0.get_texture_index(
+                                map_tile_grid.get(IVec2::new(x as i32, y as i32)),
+                            )),
+                            tilemap_id: TilemapId(entity),
+                            visible: TileVisible(false),
+                            ..Default::default()
+                        })
+                        .id();
                 tile_storage.set(&tile_pos, tile_entity);
             }
         }

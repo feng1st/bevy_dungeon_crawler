@@ -19,5 +19,10 @@ pub fn build_map(mut commands: Commands) {
 
     try_apply_prefab(&mut map_bundle, 20);
 
-    commands.spawn((Map, map_bundle));
+    let map_theme: Box<dyn MapTheme> = match rng.gen_range(0..2) {
+        0 => Box::new(DungeonTheme),
+        _ => Box::new(ForestTheme),
+    };
+
+    commands.spawn((Map, map_bundle, MapThemeComponent(map_theme)));
 }
