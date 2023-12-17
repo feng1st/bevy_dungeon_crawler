@@ -34,6 +34,7 @@ impl MapBuilder for DungeonMapBuilder {
 
         MapBundle {
             map_tile_grid,
+            map_visibility_grid: MapVisibilityGrid::new(bound),
             map_figure_grid: MapFigureGrid::new(bound),
             player_start: PlayerStart(player_start),
             amulet_start: AmuletStart(amulet_start),

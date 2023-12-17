@@ -6,5 +6,6 @@ pub fn spawn_amulet_of_yala(mut commands: Commands, query: Query<&AmuletStart>) 
     let Ok(amulet_start) = query.get_single() else {
         return;
     };
-    commands.spawn((Item, AmuletOfYala, MapPos(amulet_start.0)));
+
+    spawn_item(&mut commands, 0, amulet_start.0);
 }

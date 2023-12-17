@@ -29,3 +29,9 @@ pub struct PlayerHealthBar;
 
 #[derive(Component)]
 pub struct PlayerHealthLabel;
+
+#[derive(Component)]
+pub struct InventoryBox;
+
+#[derive(Component)]
+pub struct InventoryText;

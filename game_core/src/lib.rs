@@ -82,7 +82,10 @@ impl GameCorePlugin {
     fn register_events(app: &mut App) {
         app.add_event::<MoveAction>()
             .add_event::<AttackAction>()
-            .add_event::<RestAction>();
+            .add_event::<RestAction>()
+            .add_event::<PickupAction>()
+            .add_event::<UseItemAction>()
+            .add_event::<TileVisibilityEvent>();
     }
 
     fn config_system_sets(app: &mut App) {
@@ -212,6 +215,9 @@ impl GameCorePlugin {
                 take_damage.after(move_figure),
                 take_rest.after(take_damage),
                 calc_fov.after(move_figure),
+                reveal_map.after(calc_fov),
+                pickup_item,
+                use_item,
             )
                 .in_set(CoreSystemSet::InGameUpdateData),
         )

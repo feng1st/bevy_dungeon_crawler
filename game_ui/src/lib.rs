@@ -41,7 +41,7 @@ impl Plugin for GameUiPlugin {
                     spawn_tilemap,
                     spawn_player_sprite,
                     spawn_monster_sprites,
-                    spawn_amulet_of_yala_sprite,
+                    spawn_item_sprites,
                 )
                     .in_set(UiSystemSet::OnInGameSetupSprites),
             )
@@ -67,7 +67,8 @@ impl Plugin for GameUiPlugin {
             )
             .add_systems(
                 Update,
-                update_in_game_ui_player_health.in_set(UiSystemSet::InGameUpdateUi),
+                (update_in_game_ui_player_health, update_in_game_ui_inventory)
+                    .in_set(UiSystemSet::InGameUpdateUi),
             )
             .add_systems(
                 Update,
@@ -78,6 +79,7 @@ impl Plugin for GameUiPlugin {
                     update_camera.after(map_pos_to_trans),
                     update_cursor_position.after(update_camera),
                     update_in_game_ui_tooltip.after(update_cursor_position),
+                    remove_sprite_from_map,
                 )
                     .in_set(UiSystemSet::InGameUpdateSprites),
             );
