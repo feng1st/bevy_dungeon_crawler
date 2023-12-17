@@ -163,6 +163,49 @@ impl MapFigureGrid {
     }
 }
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum TileVisibility {
+    Hidden,
+    Revealed,
+    InSight,
+}
+
+#[derive(Component)]
+pub struct MapVisibilityGrid {
+    pub bound: IVec2,
+    pub tiles: Vec<TileVisibility>,
+}
+
+impl MapGrid<TileVisibility> for MapVisibilityGrid {
+    fn bound(&self) -> IVec2 {
+        self.bound
+    }
+
+    fn get_element(&self, index: usize) -> TileVisibility {
+        self.tiles[index]
+    }
+
+    fn set_element(&mut self, index: usize, value: TileVisibility) {
+        self.tiles[index] = value;
+    }
+}
+
+impl MapVisibilityGrid {
+    #[must_use]
+    pub fn new(bound: IVec2) -> Self {
+        Self {
+            bound,
+            tiles: vec![TileVisibility::Hidden; (bound.x * bound.y) as usize],
+        }
+    }
+}
+
+#[derive(Event)]
+pub struct TileVisibilityEvent {
+    pub pos: IVec2,
+    pub visibility: TileVisibility,
+}
+
 #[derive(Component)]
 pub struct PlayerStart(pub IVec2);
 
@@ -175,6 +218,7 @@ pub struct MonsterSpawns(pub Vec<IVec2>);
 #[derive(Bundle)]
 pub struct MapBundle {
     pub map_tile_grid: MapTileGrid,
+    pub map_visibility_grid: MapVisibilityGrid,
     pub map_figure_grid: MapFigureGrid,
     pub player_start: PlayerStart,
     pub amulet_start: AmuletStart,
