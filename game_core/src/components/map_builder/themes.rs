@@ -7,6 +7,7 @@ impl MapTheme for DungeonTheme {
         match tile_type {
             TileType::Floor => '.' as u32,
             TileType::Wall => '#' as u32,
+            TileType::Exit => '>' as u32,
             TileType::Void => 0,
         }
     }
@@ -19,6 +20,7 @@ impl MapTheme for ForestTheme {
         match tile_type {
             TileType::Floor => ';' as u32,
             TileType::Wall => '"' as u32,
+            TileType::Exit => '>' as u32,
             TileType::Void => 0,
         }
     }

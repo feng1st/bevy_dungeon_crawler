@@ -6,6 +6,7 @@ pub enum TileType {
     Void,
     Floor,
     Wall,
+    Exit,
 }
 
 #[derive(Component, Clone, Copy, PartialEq, Eq)]
@@ -94,7 +95,7 @@ impl MapTileGrid {
 
     #[must_use]
     pub fn can_enter(&self, pos: IVec2) -> bool {
-        self.get(pos) == TileType::Floor
+        self.get(pos) == TileType::Floor || self.get(pos) == TileType::Exit
     }
 
     #[must_use]
