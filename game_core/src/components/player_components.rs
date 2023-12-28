@@ -8,7 +8,9 @@ pub const MONSTER_TABLE: &[(&str, usize, i32)] = &[
 ];
 
 #[derive(Component)]
-pub struct Player;
+pub struct Player {
+    pub map_level: u32,
+}
 
 #[derive(Component)]
 pub struct Monster(pub usize);

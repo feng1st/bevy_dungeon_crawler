@@ -7,7 +7,6 @@ pub fn take_damage(
     mut map_query: Query<&mut MapFigureGrid>,
     mut commands: Commands,
     mut apply_damage_event_reader: EventReader<AttackAction>,
-    mut next_game_state: ResMut<NextState<GameState>>,
 ) {
     for action in apply_damage_event_reader.read() {
         let Ok((mut victim_health, victim_rest, victim_pos, victim_is_player)) =
@@ -28,10 +27,6 @@ pub fn take_damage(
                     map_figure_grid.reset(victim_pos.0);
                 }
                 commands.entity(action.target).despawn();
-            }
-            // kill player
-            else {
-                next_game_state.set(GameState::GameOver);
             }
         }
     }

@@ -17,6 +17,7 @@ use prelude::*;
 pub enum GameState {
     #[default]
     InGame,
+    NextLevel,
     Victory,
     GameOver,
 }

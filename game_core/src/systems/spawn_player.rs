@@ -8,7 +8,7 @@ pub fn spawn_player(mut commands: Commands, mut query: Query<(&PlayerStart, &mut
     };
     let entity = commands
         .spawn((
-            Player,
+            Player { map_level: 0 },
             Health {
                 current: 20,
                 max: 20,
