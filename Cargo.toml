@@ -8,7 +8,7 @@ resolver = "2"
 [workspace.dependencies]
 # FIXME: remove dynamic_linking upon releasing
 bevy = { version = "^0.12", features = ["dynamic_linking"] }
-bevy_ecs_tilemap = { git = "https://github.com/divark/bevy_ecs_tilemap", branch = "0.12-fixes" }
+bevy_ecs_tilemap = "^0.12"
 rand = "^0.8"
 pathfinding = "^4.4"
 game_core = { path = "game_core" }
