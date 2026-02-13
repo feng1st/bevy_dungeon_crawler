@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use bevy::prelude::*;
 use game_core::prelude::Name;
 use game_core::prelude::*;
@@ -23,14 +25,14 @@ pub fn update_in_game_ui_inventory(
         return;
     };
 
-    let text: String = item_query
+    let mut text = String::new();
+    for (no, (name, _)) in item_query
         .iter()
         .filter(|(_, carried)| carried.0 == player_entity)
         .enumerate()
-        .fold(String::new(), |mut acc, (no, (name, _))| {
-            acc.push_str(&format!("\n{} - {}", no + 1, name.0));
-            acc
-        });
+    {
+        let _ = write!(text, "\n{} - {}", no + 1, name.0);
+    }
 
     if text.is_empty() {
         inventory_box.display = Display::None;

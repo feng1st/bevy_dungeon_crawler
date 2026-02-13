@@ -46,5 +46,5 @@ pub fn reveal_map(
 
     tile_visibility_event_writer.send_batch(events);
 
-    last_field_of_view.0 = field_of_view.visible_tiles.clone();
+    last_field_of_view.0.clone_from(&field_of_view.visible_tiles);
 }

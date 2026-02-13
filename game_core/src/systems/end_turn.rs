@@ -27,7 +27,7 @@ pub fn end_turn(
                 return;
             }
         }
-    };
+    }
 
     match curr_game_turn.get() {
         GameTurn::Player => (),

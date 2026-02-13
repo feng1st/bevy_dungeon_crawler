@@ -1,3 +1,5 @@
+use std::fmt::Write;
+
 use bevy::{prelude::*, window::PrimaryWindow};
 use game_core::prelude::{Name, *};
 
@@ -30,12 +32,8 @@ pub fn update_in_game_ui_tooltip(
             for (map_pos, name, health) in entity_query.iter() {
                 if map_pos.0 == cursor_pos && field_of_view.visible_tiles.contains(&map_pos.0) {
                     let mut text = name.0.to_string();
-                    if health.is_some() {
-                        text.push_str(&format!(
-                            "\nHealth: {} / {}",
-                            health.unwrap().current,
-                            health.unwrap().max
-                        ));
+                    if let Some(h) = health {
+                        let _ = write!(text, "\nHealth: {} / {}", h.current, h.max);
                     }
                     tooltip_text.sections[0].value = text;
                     point = Some(Vec2::new(
